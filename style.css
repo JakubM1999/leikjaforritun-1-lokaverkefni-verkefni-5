@@ -1,0 +1,284 @@
+:root {
+    --bg-dark: #020205;
+    --accent-glow: #ffcc00;
+    --accent-pink: #ffcc00;
+    --glass: rgba(10, 10, 15, 0.45);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --text-main: #ffffff;
+    --text-dim: rgba(255, 255, 255, 0.7);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #000; /* Dark base */
+    color: var(--text-main);
+    font-family: 'Space Grotesk', sans-serif;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    justify-content: flex-start; /* Was center */
+    align-items: flex-start; /* Was center */
+    margin: 0;
+}
+
+/* Background Video Styling - BOTTOM LAYER */
+#video-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 0; /* Base layer */
+    overflow: hidden;
+    pointer-events: none;
+}
+
+#video-bg video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+}
+
+/* Atmospheric Overlay - MIDDLE LAYER */
+#video-bg::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    /* Darker on the left for text contrast, lighter on the right for video visibility */
+    background: linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.1) 100%);
+    z-index: 1;
+}
+
+/* MAIN UI CONTAINER - TOP LAYER */
+#slides-container, .hub-container {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    height: 100vh;
+    /* Reduced padding to save space */
+    padding: 3rem 10%;
+    display: flex;
+    flex-direction: column;
+}
+
+.centered {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Back to center since we don't want scrolling */
+    align-items: flex-start; /* Align left to fit the gradient */
+    text-align: left;
+    width: 100%;
+    height: 100%; /* Force exact height without scroll */
+    overflow: visible; /* Prevent clipping on hover */
+}
+
+/* Specific centering for specific pages if needed, but left aligned looks better full screen */
+.hub-container .centered, #slide-0 .centered, #slide-5 .centered {
+    align-items: flex-start;
+    text-align: left;
+}
+
+/* Typography Styling */
+h1 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 2.5rem;
+    font-weight: 400;
+    line-height: 1.4;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    color: var(--accent-glow);
+    text-shadow: 4px 4px 0px rgba(0,0,0,0.8);
+}
+
+h2 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1.2rem;
+    color: var(--accent-glow);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.8);
+    line-height: 1.4;
+}
+
+h2::after {
+    content: "";
+    flex-grow: 1;
+    height: 4px;
+    background: var(--accent-glow);
+    opacity: 0.5;
+}
+
+p {
+    font-size: 1rem; /* Reduced from 1.15rem */
+    line-height: 1.5; /* Reduced from 1.7 */
+    margin-bottom: 1rem; /* Reduced from 1.5rem */
+    text-shadow: 0px 2px 10px rgba(0,0,0,0.8);
+}
+
+/* Card/Module Styling */
+.module-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Slightly smaller min-width */
+    gap: 1rem; /* Reduced gap */
+    width: 100%;
+}
+
+.module {
+    background: rgba(10, 10, 15, 0.65); /* Darker for contrast */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    padding: 1.5rem; /* Reduced from 2.5rem */
+    border-radius: 20px; /* Reduced from 24px */
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    height: 100%;
+}
+
+.module:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: var(--accent-glow);
+    background: rgba(0, 242, 255, 0.1);
+}
+
+.godot-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 1.5rem;
+    filter: drop-shadow(0 0 10px var(--accent-glow));
+}
+
+/* Rubric Protocol */
+.rubric-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2.5rem;
+    background: rgba(10, 10, 15, 0.65); /* Darker for contrast */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 20px;
+    margin-bottom: 1rem;
+    border-left: 6px solid var(--accent-glow);
+}
+
+.weight {
+    background: var(--accent-glow);
+    color: #000;
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+/* Navigation Controls */
+.controls {
+    position: fixed;
+    bottom: 3rem;
+    right: 4rem; /* Moved to right */
+    z-index: 100;
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+button, .menu-btn {
+    background: rgba(10, 10, 15, 0.65);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    color: white;
+    padding: 1rem 2.5rem;
+    border-radius: 100px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.8rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    text-decoration: none;
+    display: inline-block;
+}
+
+button:hover:not(:disabled), .menu-btn:hover {
+    background: white;
+    color: #000;
+    transform: scale(1.05);
+}
+
+button:disabled {
+    opacity: 0.2;
+}
+
+.slide-indicator {
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: var(--accent-glow);
+    background: rgba(0,0,0,0.5);
+    padding: 0.8rem 1.5rem;
+    border-radius: 100px;
+    backdrop-filter: blur(5px);
+}
+
+/* SLIDE TRANSITIONS */
+.slide {
+    display: none;
+    height: 100%;
+    overflow: visible;
+}
+
+.slide.active {
+    display: block;
+    animation: slideIn 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* Video Toggle Button */
+.video-btn {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    z-index: 9999;
+    padding: 0.8rem 1.5rem;
+    font-size: 0.6rem;
+    border-radius: 100px;
+    background: rgba(10, 10, 15, 0.65);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    color: var(--text-dim);
+    cursor: pointer;
+    font-family: 'Press Start 2P', monospace;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    pointer-events: auto;
+}
+
+.video-btn:hover {
+    color: var(--accent-glow);
+    border-color: var(--accent-glow);
+    transform: scale(1.05);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
